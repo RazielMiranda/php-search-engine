@@ -72,11 +72,10 @@ $password = '';
 
     try {
         $database = new PDO($host, $user, $password);
-        //select
-        // foreach($dbh->query('SELECT * from FOO') as $row) {
-        //     print_r($row);
-        // }
-        // $dbh = null;
+
+        foreach($database->query('SELECT * from search') as $row) {
+            print_r($row);
+        }
 
         if (isset($_POST['submit'])) {
             $data = array(
@@ -88,12 +87,20 @@ $password = '';
                 'site_image_tmp' => $site_image_tmp = $_FILES['site_image']['tmp_name']
             );
     
-            $insertSite = "INSERT INTO search (site_title, site_link, site_keyword, site_description, site_image) VALUES (?,?,?,?,?)";
+            $insertSite = "
+                INSERT INTO search (site_title, site_link, site_keyword, site_description, site_image) 
+                VALUES (?,?,?,?,?)
+            ";
+            
+            move_uploaded_file($site_image_tmp,"view/storage/{$data['site_image_tmp']}");
+
             $database->prepare($insertSite)->execute($data);    
         }
 
+        $database = null;
     } catch (PDOException $e) {
         print "Error with database!: " .__FILE__. $e->getMessage() . "<br/>";
         die();
     }
+    
 ?>
