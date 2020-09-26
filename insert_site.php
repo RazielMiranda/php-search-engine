@@ -73,9 +73,9 @@ $password = '';
     try {
         $database = new PDO($host, $user, $password);
 
-        foreach($database->query('SELECT * from search') as $row) {
-            print_r($row);
-        }
+        // foreach($database->query('SELECT * from search') as $row) {
+        //     print_r($row);
+        // }
 
         if (isset($_POST['submit'])) {
             $data = array(
@@ -83,21 +83,19 @@ $password = '';
                 'site_link' => $site_link = $_POST['site_link'],
                 'site_keyword' => $site_keyword = $_POST['site_keyword'],
                 'site_description' => $site_description = $_POST['site_description'],
-                'site_image' => $site_image = $_FILES['site_image']['name'],
-                'site_image_tmp' => $site_image_tmp = $_FILES['site_image']['tmp_name']
+                'site_image' => $site_image = $_FILES['site_image']['name']
             );
-    
-            $insertSite = "
-                INSERT INTO search (site_title, site_link, site_keyword, site_description, site_image) 
-                VALUES (?,?,?,?,?)
-            ";
             
-            move_uploaded_file($site_image_tmp,"view/storage/{$data['site_image_tmp']}");
-
-            $database->prepare($insertSite)->execute($data);    
+            move_uploaded_file($_FILES['site_image']['tmp_name'],"view/storage/{$data['site_image']}");
+            $insertSite = "
+                INSERT INTO sites (site_title, site_link, site_keyword, site_description, site_image)
+                VALUES (:site_title, :site_link, :site_keyword, :site_description, :site_image);"
+            ;
+            $database->prepare($insertSite)->execute($data);
+        
         }
 
-        $database = null;
+        // $database = null;
     } catch (PDOException $e) {
         print "Error with database!: " .__FILE__. $e->getMessage() . "<br/>";
         die();
