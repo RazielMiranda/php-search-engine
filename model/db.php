@@ -5,6 +5,8 @@ class Database{
     protected $host = 'mysql:host=localhost;dbname=search';
     protected $user = 'root';
     protected $password = '';
+
+    public $dbh;
     
     function __construct($host, $user, $password){
         try {
@@ -20,7 +22,7 @@ class Database{
         }
     }
 
-    public function constructSearch(){
+    public function constructSearchTable(){
         $sql = "CREATE TABLE `search`.`sites` (
             `site_id` INT NOT NULL AUTO_INCREMENT,
             `site_title` VARCHAR(240) NOT NULL,
@@ -32,6 +34,17 @@ class Database{
           ENGINE = InnoDB
           DEFAULT CHARACTER SET = utf8;
           ";
+    }
+    
+    public function insertSearch(
+        $site_title,
+        $site_link,
+        $site_keyword,
+        $site_description,
+        $_site_image,
+        $_site_image_tmp
+    ){
+        
     }
 
     

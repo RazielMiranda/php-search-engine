@@ -65,12 +65,39 @@
 </body>
 </html>
 <?php
-if (isset($_POST['submit'])) {
-    echo $site_title = $_POST['site_title'];
-    echo $site_link = $_POST['site_link'];
-    echo $site_keyword = $_POST['site_keyword'];
-    echo $site_description = $_POST['site_description'];
-    echo $site_image = $_FILES['site_image']['name'];
-    echo $site_image_tmp = $_FILES['site_image']['tmp_name'];
-}
+
+$host = 'mysql:host=localhost;dbname=search';
+$user = 'root';
+$password = '';
+
+    try {
+        $dbh = new PDO($host, $user, $password);
+        echo 'ok';
+        //select
+        // foreach($dbh->query('SELECT * from FOO') as $row) {
+        //     print_r($row);
+        // }
+        // $dbh = null;
+    } catch (PDOException $e) {
+        print "Error with database!: " .__FILE__. $e->getMessage() . "<br/>";
+        die();
+    }
+
+    if (isset($_POST['submit'])) {
+        $data = array(
+            'site_title' => $site_title = $_POST['site_title'],
+            'site_link' => $site_link = $_POST['site_link'],
+            'site_keyword' => $site_keyword = $_POST['site_keyword'],
+            'site_description' => $site_description = $_POST['site_description'],
+            'site_image' => $site_image = $_FILES['site_image']['name'],
+            'site_image_tmp' => $site_image_tmp = $_FILES['site_image']['tmp_name']
+        );
+
+        $sql = "INSERT INTO search (name, surname, sex) VALUES (?,?,?)";
+        $pdo->prepare($sql)->execute($data);
+
+        #var_dump($data);
+
+    }
+
 ?>
