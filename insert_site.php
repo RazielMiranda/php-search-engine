@@ -73,29 +73,51 @@ $password = '';
     try {
         $database = new PDO($host, $user, $password);
 
-        // foreach($database->query('SELECT * from search') as $row) {
-        //     print_r($row);
-        // }
+        foreach($database->query('SELECT * from sites') as $row) {
+            echo "<pre>";
+                print_r($row);
+            echo "</pre>";
+        }
 
         if (isset($_POST['submit'])) {
-            $data = array(
-                'site_title' => $site_title = $_POST['site_title'],
-                'site_link' => $site_link = $_POST['site_link'],
-                'site_keyword' => $site_keyword = $_POST['site_keyword'],
-                'site_description' => $site_description = $_POST['site_description'],
-                'site_image' => $site_image = $_FILES['site_image']['name']
-            );
-            
-            move_uploaded_file($_FILES['site_image']['tmp_name'],"view/storage/{$data['site_image']}");
-            $insertSite = "
-                INSERT INTO sites (site_title, site_link, site_keyword, site_description, site_image)
-                VALUES (:site_title, :site_link, :site_keyword, :site_description, :site_image);"
-            ;
-            $database->prepare($insertSite)->execute($data);
+
+            if (
+                !empty($_POST['site_title']) &&
+                !empty($_POST['site_link']) &&
+                !empty($_POST['site_keyword']) &&
+                !empty($_POST['site_description']) &&
+                !empty($_FILES['site_image']['name'])
+            ){
+
+                $data = array(
+                    'site_title' => $site_title = $_POST['site_title'],
+                    'site_link' => $site_link = $_POST['site_link'],
+                    'site_keyword' => $site_keyword = $_POST['site_keyword'],
+                    'site_description' => $site_description = $_POST['site_description'],
+                    'site_image' => $site_image = $_FILES['site_image']['name']
+                );
+
+            }else{
+                echo 'TODOS OS CAMPOS PRECISAM SER PREENCHIDOS';
+                die();
+                exit();
+            }
+
+            if (isset($data) && !empty($data)) {
+                move_uploaded_file($_FILES['site_image']['tmp_name'],"view/storage/{$data['site_image']}");
+                $insertSite = "
+                    INSERT INTO sites (site_title, site_link, site_keyword, site_description, site_image)
+                    VALUES (:site_title, :site_link, :site_keyword, :site_description, :site_image);"
+                ;
+                $database->prepare($insertSite)->execute($data);
+                die();
+                unset($_POST);
+                header("Location: ".$_SERVER['REQUEST_URI']);
+            }
         
         }
 
-        // $database = null;
+        $database = null;
     } catch (PDOException $e) {
         print "Error with database!: " .__FILE__. $e->getMessage() . "<br/>";
         die();
