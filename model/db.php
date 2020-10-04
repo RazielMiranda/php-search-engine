@@ -6,23 +6,18 @@ class Database{
     protected $user = 'root';
     protected $password = '';
 
-    public $dbh;
+    public $db;
     
-    function __construct($host, $user, $password){
+    function __construct(){
         try {
-            $dbh = new PDO($host, $user, $password);
-            echo 'ok';
-            // foreach($dbh->query('SELECT * from FOO') as $row) {
-            //     print_r($row);
-            // }
-            // $dbh = null;
+            $db = new PDO($this->host, $this->user, $this->password);
         } catch (PDOException $e) {
             print "Error with database!: " .__FILE__. $e->getMessage() . "<br/>";
             die();
         }
     }
 
-    public function constructSearchTable(){
+    public function constructSearchTable() {
         $sql = "CREATE TABLE `search`.`sites` (
             `site_id` INT NOT NULL AUTO_INCREMENT,
             `site_title` VARCHAR(240) NOT NULL,
@@ -34,6 +29,7 @@ class Database{
           ENGINE = InnoDB
           DEFAULT CHARACTER SET = utf8;
           ";
+          return $this->db->query($sql);
     }
     
     public function insertSearch(

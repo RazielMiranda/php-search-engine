@@ -74,9 +74,23 @@ $password = '';
         $database = new PDO($host, $user, $password);
 
         foreach($database->query('SELECT * from sites') as $row) {
-            echo "<pre>";
-                print_r($row);
-            echo "</pre>";
+            echo "<table> ";
+                echo "<tr>";
+                    echo "<td>".$row['site_title']."</td>";
+                echo "</tr>";
+                echo "<tr>";
+                    echo "<td>".$row['site_link']."</td>";
+                echo "</tr>";
+                echo "<tr>";
+                    echo "<td>".$row['site_keyword']."</td>";
+                echo "</tr>";
+                echo "<tr>";
+                    echo "<td>".$row['site_description']."</td>";
+                echo "</tr>";
+                echo "<td>";
+                    echo "<td>".$row['site_image']."</td>";
+                echo "</tr>";
+            echo "</table>";
         }
 
         if (isset($_POST['submit'])) {
