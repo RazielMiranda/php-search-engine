@@ -1,5 +1,10 @@
     <img src="assets/images/logo.svg" alt="TODO - LOGO">
-    <form action="result.php" method="get">
+    <form action="view/front/results.php" method="get">
         <input type="text" name="user_query" id="user_query">
-        <input type="submit" name="search_input" id="search_input">
+        <button type="submit" id="submit">Procurar</button>
+        <button type="submit" id="submit">
+            <a href="?page=insert">
+                inserir
+            </a>
+        </button>
     </form>

@@ -11,12 +11,10 @@
 <?php require 'view/front/header.php'; ?>
 <main>
 <?php
-switch ($page = $_GET['page'] = 'home') {
+$page = ($_GET['page']) ? $page = $_GET['page'] : $page = 'home' ;
+switch ($page) {
     case 'insert':
         include('view/front/insert.php');
-        break;
-    case 'results':
-        include('view/front/results.php');
         break;
     default:
         include('view/front/home.php');
